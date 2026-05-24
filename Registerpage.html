@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Smart Crop Advisor | Register</title>
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Poppins", sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:#edf7ed;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:30px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1150px;
+      background:#fff;
+      border-radius:20px;
+      overflow:hidden;
+      display:flex;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    /* LEFT SIDE */
+
+    .left{
+      width:45%;
+      background:
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+      url("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop");
+
+      background-size:cover;
+      background-position:center;
+
+      color:white;
+
+      padding:60px 45px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .left h1{
+      font-size:48px;
+      margin-bottom:20px;
+      line-height:1.2;
+    }
+
+    .left p{
+      font-size:18px;
+      line-height:1.8;
+      color:#f1f1f1;
+      margin-bottom:35px;
+    }
+
+    .features{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .feature{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:16px;
+    }
+
+    .feature i{
+      color:#7dff9d;
+      font-size:18px;
+    }
+
+    /* RIGHT SIDE */
+
+    .right{
+      width:55%;
+      padding:50px;
+    }
+
+    .top-text{
+      margin-bottom:30px;
+    }
+
+    .top-text h2{
+      font-size:38px;
+      color:#0b5d1e;
+      margin-bottom:10px;
+    }
+
+    .top-text p{
+      color:#666;
+      font-size:15px;
+    }
+
+    form{
+      width:100%;
+    }
+
+    .row{
+      display:flex;
+      gap:20px;
+    }
+
+    .input-box{
+      width:100%;
+      margin-bottom:20px;
+      position:relative;
+    }
+
+    .input-box label{
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#333;
+      font-weight:500;
+    }
+
+    .input-box input,
+    .input-box select{
+      width:100%;
+      padding:15px;
+      border:1px solid #d6d6d6;
+      border-radius:10px;
+      font-size:15px;
+      outline:none;
+      transition:0.3s;
+      background:#fafafa;
+    }
+
+    .input-box input:focus,
+    .input-box select:focus{
+      border-color:#28a745;
+      background:#fff;
+      box-shadow:0 0 5px rgba(40,167,69,0.2);
+    }
+
+    .password-box i{
+      position:absolute;
+      right:15px;
+      top:47px;
+      cursor:pointer;
+      color:#777;
+    }
+
+    .btn{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:10px;
+      background:#28a745;
+      color:white;
+      font-size:17px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+      margin-top:10px;
+    }
+
+    .btn:hover{
+      background:#1f7d34;
+    }
+
+    .bottom-text{
+      text-align:center;
+      margin-top:22px;
+      font-size:15px;
+      color:#555;
+    }
+
+    .bottom-text a{
+      color:#0b5d1e;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    .error{
+      color:red;
+      font-size:13px;
+      margin-top:5px;
+      display:none;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:950px){
+
+      .container{
+        flex-direction:column;
+      }
+
+      .left,
+      .right{
+        width:100%;
+      }
+
+      .left{
+        padding:50px 35px;
+      }
+
+      .row{
+        flex-direction:column;
+        gap:0;
+      }
+    }
+
+    @media(max-width:600px){
+
+      .right{
+        padding:35px 25px;
+      }
+
+      .left h1{
+        font-size:36px;
+      }
+
+      .top-text h2{
+        font-size:30px;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LEFT SECTION -->
+
+    <div class="left">
+
+      <h1>Smart Crop Advisor</h1>
+
+      <p>
+        Create your account and access AI-powered farming
+        solutions for better productivity and smarter agriculture.
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <i class="fa-solid fa-circle-check"></i>
+          Smart Crop Recommendations
+        </div>
+
+        <div class="feature">
+          <i class="fa-solid fa-circle-check"></i>
+          Disease Detection Using AI
+        </div>
+
+        <div class="feature">
+          <i class="fa-solid fa-circle-check"></i>
+          Real-time Weather Insights
+        </div>
+
+        <div class="feature">
+          <i class="fa-solid fa-circle-check"></i>
+          Intelligent Irrigation Support
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT SECTION -->
+
+    <div class="right">
+
+      <div class="top-text">
+
+        <h2>Create Account</h2>
+
+        <p>
+          Fill in your details to register with Smart Crop Advisor.
+        </p>
+
+      </div>
+
+      <form id="registerForm">
+
+        <div class="row">
+
+          <!-- FULL NAME -->
+
+          <div class="input-box">
+
+            <label>Full Name</label>
+
+            <input
+            type="text"
+            id="name"
+            placeholder="Enter your full name">
+
+            <div class="error" id="nameError">
+              Full name is required
+            </div>
+
+          </div>
+
+          <!-- MOBILE -->
+
+          <div class="input-box">
+
+            <label>Mobile Number</label>
+
+            <input
+            type="text"
+            id="mobile"
+            placeholder="Enter mobile number">
+
+            <div class="error" id="mobileError">
+              Enter valid 10 digit mobile number
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- EMAIL -->
+
+        <div class="input-box">
+
+          <label>Email Address</label>
+
+          <input
+          type="email"
+          id="email"
+          placeholder="Enter email address">
+
+          <div class="error" id="emailError">
+            Enter valid email address
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <!-- PASSWORD -->
+
+          <div class="input-box password-box">
+
+            <label>Password</label>
+
+            <input
+            type="password"
+            id="password"
+            placeholder="Create password">
+
+            <i class="fa-solid fa-eye" id="togglePass1"></i>
+
+            <div class="error" id="passwordError">
+              Password must be at least 6 characters
+            </div>
+
+          </div>
+
+          <!-- CONFIRM PASSWORD -->
+
+          <div class="input-box password-box">
+
+            <label>Confirm Password</label>
+
+            <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm password">
+
+            <i class="fa-solid fa-eye" id="togglePass2"></i>
+
+            <div class="error" id="confirmError">
+              Passwords do not match
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <!-- VILLAGE -->
+
+          <div class="input-box">
+
+            <label>Village</label>
+
+            <input
+            type="text"
+            placeholder="Enter village name">
+
+          </div>
+
+          <!-- STATE -->
+
+          <div class="input-box">
+
+            <label>State</label>
+
+            <input
+            type="text"
+            placeholder="Enter state">
+
+          </div>
+
+        </div>
+
+        <!-- LANGUAGE -->
+
+        <div class="input-box">
+
+          <label>Preferred Language</label>
+
+          <select>
+
+            <option value="">Select Language</option>
+
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Punjabi</option>
+            <option>Marathi</option>
+            <option>Tamil</option>
+
+          </select>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <button type="submit" class="btn">
+          Create Account
+        </button>
+
+      </form>
+
+      <div class="bottom-text">
+
+        Already have an account?
+
+        <a href="#">Login</a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    // PASSWORD TOGGLE
+
+    function togglePassword(toggleId, inputId){
+
+      const toggle =
+      document.getElementById(toggleId);
+
+      const input =
+      document.getElementById(inputId);
+
+      toggle.addEventListener("click", () => {
+
+        if(input.type === "password"){
+
+          input.type = "text";
+
+          toggle.classList.replace("fa-eye", "fa-eye-slash");
+        }
+
+        else{
+
+          input.type = "password";
+
+          toggle.classList.replace("fa-eye-slash", "fa-eye");
+        }
+
+      });
+    }
+
+    togglePassword("togglePass1", "password");
+
+    togglePassword("togglePass2", "confirmPassword");
+
+    // FORM VALIDATION
+
+    const form =
+    document.getElementById("registerForm");
+
+    form.addEventListener("submit", function(e){
+
+      e.preventDefault();
+
+      let valid = true;
+
+      const name =
+      document.getElementById("name").value.trim();
+
+      const mobile =
+      document.getElementById("mobile").value.trim();
+
+      const email =
+      document.getElementById("email").value.trim();
+
+      const password =
+      document.getElementById("password").value.trim();
+
+      const confirmPassword =
+      document.getElementById("confirmPassword").value.trim();
+
+      // NAME
+
+      if(name === ""){
+
+        document.getElementById("nameError").style.display = "block";
+
+        valid = false;
+      }
+
+      else{
+
+        document.getElementById("nameError").style.display = "none";
+      }
+
+      // MOBILE
+
+      if(mobile.length !== 10 || isNaN(mobile)){
+
+        document.getElementById("mobileError").style.display = "block";
+
+        valid = false;
+      }
+
+      else{
+
+        document.getElementById("mobileError").style.display = "none";
+      }
+
+      // EMAIL
+
+      if(email === "" || !email.includes("@")){
+
+        document.getElementById("emailError").style.display = "block";
+
+        valid = false;
+      }
+
+      else{
+
+        document.getElementById("emailError").style.display = "none";
+      }
+
+      // PASSWORD
+
+      if(password.length < 6){
+
+        document.getElementById("passwordError").style.display = "block";
+
+        valid = false;
+      }
+
+      else{
+
+        document.getElementById("passwordError").style.display = "none";
+      }
+
+      // CONFIRM PASSWORD
+
+      if(password !== confirmPassword){
+
+        document.getElementById("confirmError").style.display = "block";
+
+        valid = false;
+      }
+
+      else{
+
+        document.getElementById("confirmError").style.display = "none";
+      }
+
+      // SUCCESS
+
+      if(valid){
+
+        alert("Registration Successful!");
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
