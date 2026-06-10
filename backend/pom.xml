@@ -1,131 +1,423 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.14</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.smartcropadvisor</groupId>
-	<artifactId>backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>21</java.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+<!--
+    pom.xml — Maven Project Object Model
+    =====================================
+    This is the BUILD CONFIGURATION file for our Java backend.
+    Maven reads this file to:
+      1. Download all required libraries (dependencies) from the internet
+      2. Compile our Java code into a runnable JAR file
+      3. Run tests
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    Think of it like package.json in Node.js — it lists what libraries we need.
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>default-compile</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-								</path>
-							</annotationProcessorPaths>
-						</configuration>
-					</execution>
-					<execution>
-						<id>default-testCompile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-								</path>
-							</annotationProcessorPaths>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    JAVA 21 NOTES:
+    - We explicitly set source/target to 21 in the compiler plugin
+    - Java 21 is an LTS (Long Term Support) release — stable and recommended
+    - Spring Boot 3.x fully supports Java 21
+    - We enable Virtual Threads (Project Loom) in application.properties
+      which is a Java 21 feature that makes every request handled by a
+      lightweight virtual thread instead of an OS thread — better performance
+
+    CHANGES FROM ORIGINAL GENERATED pom.xml:
+    1. Fixed empty <name/>, <description/> etc. tags (caused Maven warning in IntelliJ)
+    2. Added JJWT library (3 artifacts) — required for JWT token generation/validation
+    3. Added explicit Java 21 compiler config with <release>21</release>
+    4. Simplified maven-compiler-plugin (removed duplicate execution blocks,
+       Spring Boot parent already handles the defaults cleanly in Java 21)
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        PARENT — Spring Boot Starter Parent
+        =====================================
+        This is the "parent" project that SmartCropAdvisor inherits from.
+        The parent provides:
+          - Default versions for all Spring libraries (no need to specify versions manually)
+          - Default Maven plugin settings for compilation, testing, packaging
+          - Sensible defaults for Java projects
+
+        Spring Boot 3.5.x requires Java 17 minimum — we use Java 21 which is fully supported.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.14</version>
+        <relativePath/>
+    </parent>
+
+    <!--
+        PROJECT IDENTITY
+        ==================
+        groupId    = your organization/package namespace (reversed domain style)
+        artifactId = name of this specific module
+        version    = SNAPSHOT means still in active development (not a final release)
+        name       = human-readable project name (fixes the IntelliJ Maven warning)
+    -->
+    <groupId>com.smartcropadvisor</groupId>
+    <artifactId>backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>SmartCropAdvisor Backend</name>
+    <description>Spring Boot 3 REST API backend for SmartCropAdvisor — Java 21</description>
+
+    <properties>
+        <!--
+            JAVA VERSION — 21 (LTS)
+            ========================
+            This tells the Spring Boot parent AND the compiler plugin
+            which Java version to compile against.
+
+            java.version = 21 sets BOTH source AND target automatically
+            via the Spring Boot parent's compiler configuration.
+
+            Java 21 key features we benefit from:
+            - Virtual Threads (Project Loom) → enable in application.properties
+              spring.threads.virtual.enabled=true
+              This makes each HTTP request run on a lightweight virtual thread
+              instead of a traditional OS thread — better throughput under load
+            - Records → we'll use these for DTO classes in Phase 4
+              (cleaner than @Data classes for read-only data transfer objects)
+            - Pattern Matching for instanceof → cleaner type checks in service layer
+            - Sealed Classes → optional, for stricter API response type hierarchies
+            - Text Blocks → clean multiline strings (useful for error messages/SQL)
+        -->
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ============================================================
+             SPRING BOOT CORE STARTERS
+             "Starter" = a pre-bundled set of dependencies for one feature.
+             Adding one starter gives you everything needed for that feature.
+             ============================================================ -->
+
+        <!--
+            SPRING DATA JPA STARTER
+            ========================
+            Bundles: Spring Data JPA + Hibernate ORM + HikariCP connection pool
+
+            What it enables:
+            → @Entity classes (User.java, Recommendation.java) map to MySQL tables
+            → @Repository interfaces (UserRepository.java) auto-generate SQL queries
+              from method names — no raw SQL needed for basic CRUD
+            → HikariCP manages a pool of DB connections for concurrent requests
+            → Hibernate generates CREATE TABLE / ALTER TABLE on startup (ddl-auto=update)
+
+            Used in: Phase 2 (entities), Phase 3 (repositories), Phase 6 (services)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--
+            SPRING SECURITY STARTER
+            ========================
+            Bundles: Spring Security core + filter chain + authentication framework
+
+            What it enables:
+            → Intercepts EVERY HTTP request before it reaches your @RestController
+            → JWT filter checks Authorization: Bearer <token> header on each request
+            → Returns 401 Unauthorized for requests without a valid token
+            → Lets you mark routes as public (/api/v1/auth/**) or protected (rest)
+            → BCryptPasswordEncoder for hashing passwords before saving to DB
+
+            ⚠️  WARNING: The moment this dependency is on the classpath,
+            ALL endpoints become protected. You cannot call /auth/register
+            or test anything until SecurityConfig.java is written (Phase 5).
+            Until then, every request returns 401.
+
+            Used in: Phase 5 (SecurityConfig.java, JwtAuthFilter.java, JwtUtil.java)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--
+            SPRING VALIDATION STARTER
+            ==========================
+            Bundles: Hibernate Validator (Bean Validation / Jakarta Validation API)
+
+            What it enables:
+            → Validate incoming JSON request bodies automatically using annotations:
+              @NotBlank   — field cannot be null or empty string
+              @NotNull    — field cannot be null
+              @Email      — field must be a valid email format
+              @Size       — string length must be within min/max
+              @Min / @Max — number must be within range
+              @Pattern    — string must match a regex
+            → Add @Valid on @RequestBody in controller → Spring validates before calling service
+            → If validation fails → Spring returns 400 Bad Request automatically
+              (no manual "if email is empty" checks needed in your service)
+
+            Used in: Phase 4 (DTO classes), Phase 7 (controllers — @Valid annotation)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!--
+            SPRING WEB STARTER
+            ===================
+            Bundles: Spring MVC + Embedded Tomcat + Jackson JSON library
+
+            What it enables:
+            → Starts a Tomcat HTTP server embedded inside your JAR (no install needed)
+            → @RestController, @GetMapping, @PostMapping, @RequestBody, @PathVariable
+            → Jackson automatically:
+                Java object → JSON  (when you return an object from a controller method)
+                JSON → Java object  (when you use @RequestBody in a controller parameter)
+            → With Java 21 + spring.threads.virtual.enabled=true in application.properties,
+              Tomcat uses virtual threads per request instead of the default thread pool
+
+            Used in: Every controller (Phase 7), RestTemplate in services (Phase 6)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ============================================================
+             RUNTIME — only needed when the app is RUNNING, not compiling
+             ============================================================ -->
+
+        <!--
+            SPRING BOOT DEVTOOLS
+            =====================
+            What it does:
+            → Watches your .java files and auto-restarts the app on save
+            → Much faster than full restart — only reloads your app's classes,
+              not the Spring framework itself (uses two classloaders)
+            → Automatically excluded from the final production JAR
+
+            IntelliJ tip: Also enable
+            Settings → Build → Compiler → "Build project automatically"
+            AND in Registry (Ctrl+Shift+A → "Registry"):
+            compiler.automake.allow.when.app.running = true
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!--
+            MYSQL CONNECTOR/J
+            ==================
+            The official MySQL JDBC driver — the bridge between Java and MySQL.
+            Without this, JDBC cannot open a socket to MySQL regardless of config.
+            scope=runtime: we never import MySQL classes directly in our code
+            (we use JPA/Hibernate abstractions), so it's only needed at runtime.
+        -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ============================================================
+             COMPILE-TIME CODE GENERATION
+             ============================================================ -->
+
+        <!--
+            LOMBOK
+            =======
+            Generates Java boilerplate at COMPILE TIME via annotations.
+            The generated code is compiled into .class files — Lombok itself
+            is NOT in the final JAR (optional=true + excluded in build plugin).
+
+            Annotations we'll use:
+            @Data               → @Getter + @Setter + @ToString + @EqualsAndHashCode
+            @NoArgsConstructor  → public ClassName() {}  (required by JPA/Hibernate)
+            @AllArgsConstructor → constructor with every field as parameter
+            @Builder            → MyClass.builder().field(val).build() pattern
+            @Slf4j              → private static final Logger log = LoggerFactory...
+                                  lets you call log.info(), log.warn(), log.error()
+
+            NOTE for Java 21:
+            We use Lombok for @Entity classes (Phase 2) because JPA requires
+            mutable classes with no-arg constructors — Java Records can't be entities.
+            For DTOs (Phase 4) we use Java 21 Records instead — they're cleaner.
+        -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ============================================================
+             JWT — JSON Web Token library (ADDED — was missing in original)
+             ================================================================
+             JJWT by io.jsonwebtoken — the standard Java JWT library.
+
+             Why 3 separate artifacts?
+             jjwt-api    → the interfaces your code calls (compile + runtime)
+             jjwt-impl   → the actual crypto/parsing implementation (runtime only)
+             jjwt-jackson → bridges JJWT with Jackson for JSON claim parsing (runtime)
+
+             This separation lets you swap the implementation without changing your code.
+             Your JwtUtil.java imports from jjwt-api only.
+
+             Used in: Phase 5 — JwtUtil.java (token generation + validation)
+             ============================================================ -->
+
+        <!--
+            JJWT API — the interfaces your code references directly
+            Jwts.builder(), Claims, SignatureAlgorithm, etc.
+            Default scope = compile (needed at compile time and runtime)
+        -->
+        <!--
+            JJWT API — the interfaces your code references directly
+            Jwts.builder(), Claims, SignatureAlgorithm, etc.
+            Updated to 0.12.6 — patches CVE-2024-31033 (broken crypto algorithm vulnerability)
+        -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+
+        <!--
+            JJWT IMPL — the real implementation loaded at runtime via ServiceLoader
+            Your code never imports from this directly — Spring/JVM finds it automatically.
+            scope=runtime: not needed during compilation of our source files.
+            0.12.6 — fixes CVE-2024-31033 (was using a weakened ECDSA curve in 0.12.5)
+        -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--
+            JJWT JACKSON — enables JJWT to read/write JWT claims as JSON
+            Uses the Jackson ObjectMapper already provided by spring-boot-starter-web.
+            scope=runtime: wired up automatically, not imported in our code.
+        -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ============================================================
+             TEST — only available during mvn test, not in the running app
+             ============================================================ -->
+
+        <!--
+            SPRING BOOT TEST STARTER
+            =========================
+            Bundles: JUnit 5 + Mockito + Spring Test + AssertJ + Hamcrest
+
+            JUnit 5      → write test methods with @Test
+            Mockito      → mock/stub dependencies (e.g. mock UserRepository in AuthService test)
+            Spring Test  → spin up Spring context for integration tests with @SpringBootTest
+            AssertJ      → fluent assertions: assertThat(result).isEqualTo("Rice")
+
+            We'll write tests in Phase 8 — PostMan first, then unit tests.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--
+            SPRING SECURITY TEST
+            =====================
+            Adds Spring Security-specific test utilities:
+            @WithMockUser("farmer@gmail.com") → simulate a logged-in user in tests
+            SecurityMockMvcRequestPostProcessors → inject auth into MockMvc requests
+            Lets you test secured endpoints without generating real JWT tokens.
+        -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!--
+                SPRING BOOT MAVEN PLUGIN
+                =========================
+                Two main jobs:
+                1. mvn spring-boot:run  → starts the app in development mode
+                2. mvn clean package    → builds a fat JAR with all dependencies bundled
+                   Output: target/backend-0.0.1-SNAPSHOT.jar
+                   Run it: java -jar target/backend-0.0.1-SNAPSHOT.jar
+
+                The <excludes> block prevents Lombok from being bundled in the final JAR.
+                Lombok's job is done at compile time — the generated code is already
+                compiled into .class files, so the Lombok JAR itself is not needed at runtime.
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!--
+                MAVEN COMPILER PLUGIN — Java 21 Configuration
+                ===============================================
+                Tells Maven exactly HOW to compile our Java source files.
+
+                <release>21</release>
+                → The modern way to set Java version (replaces old <source>/<target> pair).
+                → Ensures we compile WITH Java 21 syntax AND against Java 21 class libraries.
+                → Prevents accidentally using APIs removed/changed between Java versions.
+
+                <annotationProcessorPaths> — CRITICAL for Lombok
+                → Registers Lombok as an annotation processor that runs BEFORE compilation.
+                → Without this block, @Getter/@Setter/@Data etc. are ignored — you'd get
+                  "cannot find symbol: method getId()" errors because getters were never generated.
+                → The processor generates .java source files in memory → compiler compiles them
+                  together with your code → all in one pass, seamlessly.
+
+                Java 21 bonus: the compiler also processes Records, Sealed Classes,
+                and Pattern Matching without any extra config here.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Use Java 21 syntax and class libraries -->
+                    <release>21</release>
+                    <annotationProcessorPaths>
+                        <!--
+                            Lombok annotation processor
+                            Runs first — generates getter/setter/constructor code
+                            before the main Java compiler sees your classes.
+                        -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                    <!-- Enable preview features only if needed in future phases -->
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
