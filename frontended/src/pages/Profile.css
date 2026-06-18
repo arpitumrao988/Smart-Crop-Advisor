@@ -1,0 +1,84 @@
+.profile-container {
+    padding-top: 36px;
+    padding-bottom: 56px;
+    max-width: 900px;
+  }
+  
+  .profile-header {
+    margin-bottom: 28px;
+  }
+  
+  .profile-title    { font-size: 32px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px; }
+  .profile-subtitle { font-size: 15px; color: var(--text-secondary); }
+  
+  .profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  
+  /* ── Left Card ─────────────────────────────────────────────── */
+  .profile-card {
+    text-align: center;
+    padding: 32px 24px;
+  }
+  
+  .profile-avatar {
+    width: 90px;
+    height: 90px;
+    background: var(--primary-pale);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    border: 3px solid var(--primary-light);
+  }
+  
+  .avatar-emoji { font-size: 44px; }
+  .profile-name  { font-size: 20px; font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; }
+  .profile-email { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  
+  .profile-meta { text-align: left; }
+  
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .meta-item:last-child { border-bottom: none; }
+  
+  .meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 0.5px; color: var(--text-muted); }
+  .meta-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  
+  /* ── Edit Section ──────────────────────────────────────────── */
+  .edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  
+  .edit-title { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
+  .edit-btn   { font-size: 14px; }
+  
+  /* Read-only input styling */
+  .input-readonly {
+    background: var(--bg-light) !important;
+    color: var(--text-secondary) !important;
+    cursor: default !important;
+  }
+  
+  /* ── Danger Zone ───────────────────────────────────────────── */
+  .danger-zone { margin-top: 8px; }
+  .danger-title { font-size: 15px; font-weight: 700; color: var(--danger-red); margin-bottom: 8px; }
+  .danger-desc  { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
+  
+  @media (max-width: 768px) {
+    .profile-layout { grid-template-columns: 1fr; }
+  }

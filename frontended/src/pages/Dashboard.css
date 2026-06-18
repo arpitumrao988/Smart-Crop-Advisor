@@ -1,0 +1,150 @@
+.dashboard-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  
+  .dashboard-greeting {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+  }
+  
+  .dashboard-subtitle { font-size: 15px; color: var(--text-secondary); }
+  
+  .dashboard-profile-btn { font-size: 14px; white-space: nowrap; }
+  
+  /* ── Stats ─────────────────────────────────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+  }
+  
+  .stat-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  
+  .stat-card-value { font-size: 26px; font-weight: 800; color: var(--text-primary); }
+  .stat-card-label { font-size: 12px; color: var(--text-muted); font-weight: 600;
+                     text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+  
+  /* ── Section ───────────────────────────────────────────────── */
+  .dashboard-section { margin-bottom: 32px; }
+  
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 16px;
+  }
+  
+  /* ── Quick Actions ─────────────────────────────────────────── */
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .quick-action-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .quick-action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .qac-green  { background: linear-gradient(135deg, #43a047, #2e7d32); }
+  .qac-blue   { background: linear-gradient(135deg, #1976d2, #1565c0); }
+  .qac-cyan   { background: linear-gradient(135deg, #00838f, #00695c); }
+  .qac-orange { background: linear-gradient(135deg, #f57c00, #e65100); }
+  
+  .qac-icon  { font-size: 28px; flex-shrink: 0; }
+  .qac-label { flex: 1; }
+  .qac-arrow { font-size: 18px; opacity: 0.7; }
+  
+  /* ── Table ─────────────────────────────────────────────────── */
+  .table-wrapper { overflow-x: auto; }
+  
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  .history-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--bg-light);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .history-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  .history-table tr:last-child td { border-bottom: none; }
+  .history-table tr:hover td { background: var(--primary-pale); }
+  
+  .result-cell { font-weight: 600; color: var(--primary-dark); }
+  .date-cell   { color: var(--text-muted); font-size: 13px; }
+  
+  /* ── Empty State ───────────────────────────────────────────── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .empty-icon { font-size: 56px; display: block; margin-bottom: 16px; }
+  .empty-state p { font-size: 16px; color: var(--text-secondary); margin-bottom: 4px; }
+  
+  @media (max-width: 1024px) {
+    .stats-grid,
+    .quick-actions-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  @media (max-width: 600px) {
+    .stats-grid,
+    .quick-actions-grid { grid-template-columns: 1fr; }
+    .dashboard-greeting  { font-size: 24px; }
+  }
