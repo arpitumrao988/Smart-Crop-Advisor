@@ -2,7 +2,7 @@
 //  FILE LOCATION:
 //  src/main/java/com/smartcropadvisor/backend/dto/ApiResponse.java
 //
-//  Rewritten WITHOUT @Builder to avoid Lombok processing issues.
+
 //  Uses plain constructor + static factory methods instead.
 //  Works 100% without any annotation processing.
 // ============================================================

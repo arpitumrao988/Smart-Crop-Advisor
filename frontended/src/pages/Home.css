@@ -1,0 +1,258 @@
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-green) 60%, #66bb6a 100%);
+    padding: 80px 0 100px;
+    overflow: hidden;
+  }
+  
+  .hero-section .container {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  
+  .hero-content { flex: 1; }
+  
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  
+  .hero-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  
+  .hero-highlight {
+    color: #b9f6ca;
+  }
+  
+  .hero-description {
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 32px;
+  }
+  
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  
+  .hero-btn-primary {
+    padding: 14px 32px;
+    font-size: 16px;
+    background: white;
+    color: var(--primary-dark);
+  }
+  
+  .hero-btn-primary:hover {
+    background: var(--primary-pale);
+  }
+  
+  .hero-btn-secondary {
+    padding: 14px 32px;
+    font-size: 16px;
+    border-color: rgba(255,255,255,0.6);
+    color: white;
+  }
+  
+  .hero-btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+  
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .stat-item { text-align: center; }
+  .stat-value { display: block; font-size: 28px; font-weight: 800; color: #b9f6ca; }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); }
+  .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.2); }
+  
+  /* ── Illustration ─────────────────────────────────────────── */
+  .hero-illustration {
+    flex: 0 0 320px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 320px;
+  }
+  
+  .illustration-circle {
+    width: 220px;
+    height: 220px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: gentlePulse 3s ease-in-out infinite;
+  }
+  
+  @keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.04); }
+  }
+  
+  .illustration-main { font-size: 80px; }
+  
+  .floating-badge {
+    position: absolute;
+    background: white;
+    color: var(--primary-dark);
+    padding: 8px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .fb-1 { top: 20px;   right: 0;    animation-delay: 0s;   }
+  .fb-2 { bottom: 60px; right: 0;   animation-delay: 0.8s; }
+  .fb-3 { bottom: 20px; left: 0;    animation-delay: 1.6s; }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  
+  /* ── Features ─────────────────────────────────────────────── */
+  .features-section {
+    padding: 80px 0;
+    background: var(--bg-light);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  
+  .feature-card {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+  }
+  
+  .feature-icon  { font-size: 40px; margin-bottom: 16px; }
+  .feature-title { font-size: 17px; font-weight: 700; color: var(--primary-dark);
+                   margin-bottom: 10px; }
+  .feature-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+  
+  /* ── How It Works ─────────────────────────────────────────── */
+  .how-section {
+    padding: 80px 0;
+    background: white;
+  }
+  
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  
+  .step-card {
+    text-align: center;
+    padding: 28px 20px;
+    position: relative;
+  }
+  
+  .step-number {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--primary-pale);
+    line-height: 1;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .step-icon  { font-size: 32px; margin-bottom: 12px; }
+  .step-title { font-size: 16px; font-weight: 700; color: var(--primary-dark);
+                margin-bottom: 8px; }
+  .step-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+  
+  /* ── Tech ─────────────────────────────────────────────────── */
+  .tech-section { padding: 60px 0; background: var(--primary-pale); }
+  
+  .tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* ── CTA ──────────────────────────────────────────────────── */
+  .cta-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-green));
+    text-align: center;
+  }
+  
+  .cta-section h2 { font-size: 36px; font-weight: 800; color: white; margin-bottom: 12px; }
+  .cta-section p  { font-size: 16px; color: rgba(255,255,255,0.85); margin-bottom: 28px; }
+  
+  .cta-btn {
+    background: white;
+    color: var(--primary-dark);
+    padding: 16px 40px;
+    font-size: 16px;
+  }
+  
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .features-grid,
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section .container { flex-direction: column; }
+    .hero-illustration { display: none; }
+    .hero-title { font-size: 36px; }
+    .features-grid,
+    .steps-grid { grid-template-columns: 1fr; }
+  }
