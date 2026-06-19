@@ -30,6 +30,7 @@
 
 package com.smartcropadvisor.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -37,56 +38,47 @@ import jakarta.validation.constraints.Positive;
 
 public record CropRecommendRequest(
 
-        // ── userId ────────────────────────────────────────────
-        // ID of the farmer making this request.
-        // Used to link the SoilInput and Recommendation to the correct user.
-        // @NotNull → must be provided (we need to know which user this is for)
-        @NotNull(message = "User ID is required")
-        Long userId,
-
-        // ── nitrogen ──────────────────────────────────────────
+        // ── N (nitrogen) ──────────────────────────────────────────
         // Nitrogen content in soil (mg/kg)
-        // @NotNull → field must be present in the JSON
-        // @Positive → must be greater than 0
+        // Mapped from JSON field "N"
+        @JsonProperty("N")
         @NotNull(message = "Nitrogen value is required")
         @Positive(message = "Nitrogen must be a positive value")
         Double nitrogen,
 
-        // ── phosphorus ────────────────────────────────────────
+        // ── P (phosphorus) ────────────────────────────────────────
+        // Mapped from JSON field "P"
+        @JsonProperty("P")
         @NotNull(message = "Phosphorus value is required")
         @Positive(message = "Phosphorus must be a positive value")
         Double phosphorus,
 
-        // ── potassium ─────────────────────────────────────────
+        // ── K (potassium) ─────────────────────────────────────────
+        // Mapped from JSON field "K"
+        @JsonProperty("K")
         @NotNull(message = "Potassium value is required")
         @Positive(message = "Potassium must be a positive value")
         Double potassium,
 
         // ── temperature ───────────────────────────────────────
-        // Temperature in Celsius
-        // @DecimalMin / @DecimalMax → realistic temperature range check
         @NotNull(message = "Temperature value is required")
         @DecimalMin(value = "-10.0", message = "Temperature seems too low")
         @DecimalMax(value = "60.0", message = "Temperature seems too high")
         Double temperature,
 
         // ── humidity ──────────────────────────────────────────
-        // Relative humidity percentage (0-100)
         @NotNull(message = "Humidity value is required")
         @DecimalMin(value = "0.0", message = "Humidity cannot be negative")
         @DecimalMax(value = "100.0", message = "Humidity cannot exceed 100%")
         Double humidity,
 
         // ── ph ────────────────────────────────────────────────
-        // Soil pH level (0-14 scale)
-        // @DecimalMin/Max enforces valid pH range
         @NotNull(message = "pH value is required")
         @DecimalMin(value = "0.0", message = "pH cannot be less than 0")
         @DecimalMax(value = "14.0", message = "pH cannot exceed 14")
         Double ph,
 
         // ── rainfall ──────────────────────────────────────────
-        // Annual rainfall in mm
         @NotNull(message = "Rainfall value is required")
         @Positive(message = "Rainfall must be a positive value")
         Double rainfall

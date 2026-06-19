@@ -25,28 +25,20 @@
 package com.smartcropadvisor.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 
 public record DiseaseDetectRequest(
 
-        // ── userId ────────────────────────────────────────────
-        // Which farmer is making this detection request.
-        @NotNull(message = "User ID is required")
-        Long userId,
-
         // ── cropName ──────────────────────────────────────────
         // The crop the farmer is checking.
-        // Must match one of the crops the AI model was trained on.
         // Examples: "Rice", "Wheat", "Maize", "Cotton", "Sugarcane"
         @NotBlank(message = "Crop name is required")
         String cropName,
 
         // ── symptoms ──────────────────────────────────────────
-        // Free text description of what the farmer observes on their crop.
-        // The AI NLP model processes this text to predict the disease.
-        // Example: "Leaves turning yellow from edges, brown spots in center,
-        //           plant wilting even with adequate water"
-        @NotBlank(message = "Please describe the symptoms you are seeing")
-        String symptoms
+        // List of symptoms observed.
+        @NotEmpty(message = "Please describe or select at least one symptom")
+        List<String> symptoms
 
 ) {}
