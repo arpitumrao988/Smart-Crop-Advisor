@@ -1,0 +1,103 @@
+/* Shared styles for all recommendation pages */
+
+.recommend-container {
+    padding-top: 36px;
+    padding-bottom: 56px;
+  }
+  
+  .recommend-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  
+  .recommend-title {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+  }
+  
+  .recommend-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+  
+  /* Two-column layout: form left, result right */
+  .recommend-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  
+  /* Form Section */
+  .recommend-form-section { display: flex; flex-direction: column; gap: 20px; }
+  .form-section-title    { font-size: 18px; font-weight: 700; color: var(--primary-dark);
+                           margin-bottom: 4px; }
+  .form-section-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+  
+  /* 2-col grid inside forms for field pairs */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  /* Unit label next to field title */
+  .field-unit {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    text-transform: uppercase;
+  }
+  
+  /* Range/tip hint below input */
+  .field-tip {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  
+  /* Buttons row at bottom of form */
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  
+  /* Result section */
+  .recommend-result-section { position: sticky; top: 90px; }
+  
+  /* Placeholder when no result yet */
+  .result-placeholder {
+    background: white;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 60px 32px;
+    text-align: center;
+  }
+  
+  .placeholder-icon { font-size: 56px; display: block; margin-bottom: 16px; }
+  .result-placeholder h3 { font-size: 18px; font-weight: 700;
+                            color: var(--text-secondary); margin-bottom: 8px; }
+  .result-placeholder p  { font-size: 14px; color: var(--text-muted); }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .recommend-layout { grid-template-columns: 1fr; }
+    .recommend-result-section { position: static; }
+  }
+  
+  @media (max-width: 600px) {
+    .fields-grid { grid-template-columns: 1fr; }
+    .recommend-title { font-size: 26px; }
+  }
