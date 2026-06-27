@@ -1,21 +1,32 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import List
 import joblib
 from pathlib import Path
-import requests
+import numpy as np
+from scipy.sparse import hstack, csr_matrix
 
 app = FastAPI()
 
 BASE_DIR = Path(__file__).resolve().parent
 print(BASE_DIR)
+
+# ── Crop Recommendation Model ──────────────────────────────────────────────
 model= joblib.load(BASE_DIR/"models/crop_model.pkl")
 label= joblib.load(BASE_DIR/"models/label_encoders.pkl")
 scaler= joblib.load(BASE_DIR/"models/scaler.pkl")
+
+
+
+
+
+# ── Fertilizer Recommendation Model ────────────────────────────────────────
 fertilizer_label_encoders = joblib.load(BASE_DIR/"models/fertilizer_label_encoders.pkl")
 fertilizer_model= joblib.load(BASE_DIR /"models/fertilizer_model.pkl")
 fertilizer_scaler  = joblib.load(BASE_DIR/"models/fertilizer_scaler.pkl")
 fertilizer_target_encoder= joblib.load(BASE_DIR/"models/fertilizer_target_encoder.pkl")
 fertilizer_metadata=joblib.load(BASE_DIR/"models/fertilizer_model_metadata.pkl")
+
 
 
 
@@ -108,4 +119,23 @@ def fertilizer_predict(data : fertilizerInput):
         "confidence": round(confidence,2)
     }
 
+
+
+
+# Disease prediction model
+
+disease_crop_encoder = joblib.load(BASE_DIR/"models/disease_crop_encoder.pkl,")
+disease_crop_metadata = joblib.load(BASE_DIR/"models/disease_crop_metadata.pkl")
+disease_model = joblib.load(BASE_DIR/"models/disease_model.pkl")
+disease_target_encoder = joblib.load(BASE_DIR/"models/disease_target_encoder.pkl")
+disease_tfidf = joblib.load(BASE_DIR/"models/disease_tfidf.pkl")
+
+class disease_data(BaseModel):
+    cropName = str
+    symptomName = list[str] 
+
+symptomText= " ".join(disease_data.symptomName)
+
+crop = disease_crop_encoder.transform([disease_data.cropName])[0]
+symptomVector = disease_tfidf.transform([symptomText])
 
