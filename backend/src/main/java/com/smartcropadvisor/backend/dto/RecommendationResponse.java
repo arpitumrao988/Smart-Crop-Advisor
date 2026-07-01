@@ -43,10 +43,10 @@ public record RecommendationResponse(
         // Frontend can use this to fetch details of a specific recommendation.
         Long id,
 
-        // ── recommendationType ────────────────────────────────
+        // ── type ────────────────────────────────
         // One of: CROP, FERTILIZER, IRRIGATION, DISEASE
         // Frontend uses this to show the right icon/color on the history card.
-        RecommendationType recommendationType,
+        RecommendationType type,
 
         // ── result ────────────────────────────────────────────
         // The main AI prediction output.
@@ -91,4 +91,4 @@ public record RecommendationResponse(
                 recommendation.getCreatedAt()
         );
     }
-}
+}

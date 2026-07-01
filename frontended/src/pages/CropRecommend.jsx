@@ -16,6 +16,7 @@
 
 import React, { useState } from "react";
 import { getCropRecommendation } from "../services/recommendService";
+import { useLanguage } from "../context/LanguageContext";
 import RecommendationCard from "../components/RecommendationCard";
 import AlertBanner        from "../components/AlertBanner";
 import Loader             from "../components/Loader";
@@ -69,76 +70,53 @@ const FORM_FIELDS = [
 ];
 
 function CropRecommend() {
+  const { language } = useLanguage();
+
   // ── Form State ───────────────────────────────────────────
-  // Starts with all fields empty string
   const initialForm = FORM_FIELDS.reduce((acc, f) => ({ ...acc, [f.name]: "" }), {});
   const [formData, setFormData] = useState(initialForm);
 
   // ── UI State ─────────────────────────────────────────────
-  const [loading,    setLoading]    = useState(false); // API call in progress
-  const [result,     setResult]     = useState(null);  // Recommendation result from backend
-  const [error,      setError]      = useState("");    // Error message
+  const [loading,    setLoading]    = useState(false);
+  const [result,     setResult]     = useState(null);
+  const [error,      setError]      = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(""); // Clear error when user starts editing
+    setError("");
   };
 
   // ── handleSubmit() ───────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Client-side validation: all fields must have a value
     const hasEmpty = FORM_FIELDS.some((f) => formData[f.name] === "");
     if (hasEmpty) {
-      setError("Please fill in all the fields before submitting.");
+      setError(language === "hi" 
+        ? "कृपया सबमिट करने से पहले सभी फ़ील्ड भरें।" 
+        : "Please fill in all the fields before submitting."
+      );
       return;
     }
 
     setLoading(true);
-    setResult(null);  // Clear previous result
+    setResult(null);
 
-    // Convert all string values to numbers for the API
     const numericData = {};
     FORM_FIELDS.forEach((f) => {
       numericData[f.name] = parseFloat(formData[f.name]);
     });
 
-    // ─────────────────────────────────────────────────────────
-    // 🔗 API CALL — POST /api/v1/recommend/crop
-    //    Sent to: http://localhost:8080/api/v1/recommend/crop
-    //    Auth:    Bearer token (added automatically by service)
-    //    Body:    { N: 90, P: 42, K: 43, temperature: 25.5,
-    //               humidity: 80, ph: 6.5, rainfall: 202.9 }
-    //
-    //    Backend Flow:
-    //      1. Spring Security validates JWT token
-    //      2. RecommendService saves soil input to MySQL
-    //      3. Backend calls Python AI: POST localhost:5000/predict/crop
-    //      4. Python runs Random Forest model → returns prediction
-    //      5. Backend saves recommendation to MySQL
-    //      6. Returns result to frontend
-    //
-    //    Returns: {
-    //      recommendedCrop: "Rice",
-    //      confidence: 94.7,
-    //      alternatives: ["Maize", "Jute"],
-    //      advisoryNote: "Your soil conditions are suitable for Rice...",
-    //      savedAt: "2025-06-08T10:30:00Z"
-    //    }
-    // ─────────────────────────────────────────────────────────
     const res = await getCropRecommendation(numericData);
-
     setLoading(false);
 
     if (res.success) {
-      setResult(res.data); // Store result → triggers RecommendationCard render
+      setResult(res.data);
     } else {
       setError(res.message);
     }
   };
 
-  // ── Reset form and result ─────────────────────────────────
   const handleReset = () => {
     setFormData(initialForm);
     setResult(null);
@@ -151,10 +129,14 @@ function CropRecommend() {
 
         {/* ── Page Header ────────────────────────────────── */}
         <div className="recommend-header">
-          <h1 className="recommend-title">🌾 Crop Recommendation</h1>
+          <h1 className="recommend-title">
+            {language === "hi" ? "🌾 फसल अनुशंसा" : "🌾 Crop Recommendation"}
+          </h1>
           <p className="recommend-subtitle">
-            Enter your soil and climate data below. Our AI model will recommend
-            the best crop to grow based on your exact field conditions.
+            {language === "hi"
+              ? "नीचे अपनी मिट्टी और जलवायु का डेटा दर्ज करें। हमारा AI मॉडल आपके खेत की सही परिस्थितियों के आधार पर उगाने के लिए सबसे अच्छी फसल की सिफारिश करेगा।"
+              : "Enter your soil and climate data below. Our AI model will recommend the best crop to grow based on your exact field conditions."
+            }
           </p>
         </div>
 
@@ -163,12 +145,16 @@ function CropRecommend() {
           {/* ── Left: Input Form ───────────────────────────── */}
           <div className="recommend-form-section">
             <div className="card">
-              <h2 className="form-section-title">📋 Enter Field Data</h2>
+              <h2 className="form-section-title">
+                {language === "hi" ? "📋 खेत का डेटा दर्ज करें" : "📋 Enter Field Data"}
+              </h2>
               <p className="form-section-subtitle">
-                All values must reflect your current field conditions.
+                {language === "hi"
+                  ? "सभी मान आपकी वर्तमान खेत की स्थिति को दर्शाने चाहिए।"
+                  : "All values must reflect your current field conditions."
+                }
               </p>
 
-              {/* Error Alert */}
               {error && (
                 <AlertBanner
                   type="error"
@@ -178,34 +164,55 @@ function CropRecommend() {
               )}
 
               <form onSubmit={handleSubmit} noValidate>
-                {/* Dynamically render all 7 input fields from FORM_FIELDS array */}
                 <div className="fields-grid">
-                  {FORM_FIELDS.map((field) => (
-                    <div key={field.name} className="form-group">
-                      <label className="form-label" htmlFor={field.name}>
-                        {field.label}
-                        <span className="field-unit">{field.unit}</span>
-                      </label>
-                      <input
-                        id={field.name}
-                        name={field.name}
-                        type="number"
-                        step="any"
-                        className="form-input"
-                        placeholder={field.placeholder}
-                        value={formData[field.name]}
-                        onChange={handleChange}
-                        min={field.min}
-                        max={field.max}
-                        disabled={loading}
-                      />
-                      {/* Tooltip with acceptable range */}
-                      <p className="field-tip">{field.tip}</p>
-                    </div>
-                  ))}
+                  {FORM_FIELDS.map((field) => {
+                    const label = language === "hi" 
+                      ? (field.name === "N" ? "नाइट्रोजन (N)" :
+                         field.name === "P" ? "फास्फोरस (P)" :
+                         field.name === "K" ? "पोटेशियम (K)" :
+                         field.name === "temperature" ? "तापमान" :
+                         field.name === "humidity" ? "आर्द्रता" :
+                         field.name === "ph" ? "मिट्टी pH" : "वर्षा")
+                      : field.label;
+
+                    const placeholder = language === "hi"
+                      ? `सीमा: ${field.min} - ${field.max}`
+                      : `Range: ${field.min} - ${field.max}`;
+
+                    const tip = language === "hi"
+                      ? (field.name === "N" ? "मिट्टी में उपलब्ध नाइट्रोजन। आदर्श: 0-140 mg/kg" :
+                         field.name === "P" ? "मिट्टी में उपलब्ध फास्फोरस। आदर्श: 5-145 mg/kg" :
+                         field.name === "K" ? "मिट्टी में उपलब्ध पोटेशियम। आदर्श: 5-205 mg/kg" :
+                         field.name === "temperature" ? "औसत स्थानीय तापमान। आदर्श: 10-45 °C" :
+                         field.name === "humidity" ? "खेत में सापेक्ष आर्द्रता। सीमा: 14-100 %" :
+                         field.name === "ph" ? "मिट्टी की अम्लता/क्षारीयता। सीमा: 3.5-10" : "वार्षिक या मौसमी वर्षा। सीमा: 20-300 mm")
+                      : field.tip;
+
+                    return (
+                      <div key={field.name} className="form-group">
+                        <label className="form-label" htmlFor={field.name}>
+                          {label}
+                          <span className="field-unit">{field.unit}</span>
+                        </label>
+                        <input
+                          id={field.name}
+                          name={field.name}
+                          type="number"
+                          step="any"
+                          className="form-input"
+                          placeholder={placeholder}
+                          value={formData[field.name]}
+                          onChange={handleChange}
+                          min={field.min}
+                          max={field.max}
+                          disabled={loading}
+                        />
+                        <p className="field-tip">{tip}</p>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* Form Action Buttons */}
                 <div className="form-actions">
                   <button
                     type="submit"
@@ -213,9 +220,9 @@ function CropRecommend() {
                     disabled={loading}
                   >
                     {loading ? (
-                      <><span className="btn-spinner" /> Analyzing...</>
+                      <><span className="btn-spinner" /> {language === "hi" ? "विश्लेषण हो रहा है..." : "Analyzing..."}</>
                     ) : (
-                      "🤖 Get Recommendation"
+                      language === "hi" ? "🤖 सुझाव प्राप्त करें" : "🤖 Get Recommendation"
                     )}
                   </button>
                   <button
@@ -224,7 +231,7 @@ function CropRecommend() {
                     onClick={handleReset}
                     disabled={loading}
                   >
-                    🔄 Reset
+                    {language === "hi" ? "🔄 रीसेट" : "🔄 Reset"}
                   </button>
                 </div>
               </form>
@@ -234,32 +241,25 @@ function CropRecommend() {
           {/* ── Right: Result Section ──────────────────────── */}
           <div className="recommend-result-section">
 
-            {/* Loading spinner while waiting for API */}
             {loading && (
-              <Loader message="AI is analyzing your field data..." />
+              <Loader message={language === "hi" ? "AI आपके खेत के डेटा का विश्लेषण कर रहा है..." : "AI is analyzing your field data..."} />
             )}
 
-            {/* 
-                Show result card when API returns successfully
-                RecommendationCard receives the full API response
-                and renders it in a formatted card
-            */}
             {!loading && result && (
               <>
                 <AlertBanner
                   type="success"
-                  message="Recommendation generated and saved to your history!"
+                  message={language === "hi" ? "अनुशंसा सफलतापूर्वक उत्पन्न और इतिहास में सहेजी गई!" : "Recommendation generated and saved to your history!"}
                 />
                 <RecommendationCard type="crop" data={result} />
               </>
             )}
 
-            {/* Placeholder shown when no result yet and not loading */}
             {!loading && !result && (
               <div className="result-placeholder">
                 <span className="placeholder-icon">🌾</span>
-                <h3>Your recommendation will appear here</h3>
-                <p>Fill in the form on the left and click "Get Recommendation"</p>
+                <h3>{language === "hi" ? "आपकी अनुशंसा यहाँ दिखाई देगी" : "Your recommendation will appear here"}</h3>
+                <p>{language === "hi" ? "बाईं ओर फॉर्म भरें और 'सुझाव प्राप्त करें' पर क्लिक करें" : "Fill in the form on the left and click 'Get Recommendation'"}</p>
               </div>
             )}
           </div>
