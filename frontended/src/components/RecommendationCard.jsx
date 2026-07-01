@@ -1,21 +1,10 @@
-// ============================================================
-// RecommendationCard.jsx — Displays AI Prediction Results
-//
-// Used by: CropRecommend, FertilizerRecommend,
-//          IrrigationAdvisory, DiseaseDetect pages
-//
-// Props:
-//   type        — "crop" | "fertilizer" | "irrigation" | "disease"
-//   data        — The recommendation object from the API response
-//   onSave      — Optional: called when user clicks "Save" button
-//
-// NO API CALLS in this component
-// ============================================================
-
 import React from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { translateTerm, translateSentence } from "../translations/translations";
 import "./RecommendationCard.css";
 
 function RecommendationCard({ type, data }) {
+  const { language } = useLanguage();
 
   // Map type to display label and color
   const typeConfig = {
@@ -43,11 +32,18 @@ function RecommendationCard({ type, data }) {
       <div className="rec-card-header">
         <span className="rec-card-icon">{config.icon}</span>
         <div>
-          <p className="rec-card-type">{config.label}</p>
+          <p className="rec-card-type">
+            {language === "hi" 
+              ? (type === "crop" ? "फसल अनुशंसा" : 
+                 type === "fertilizer" ? "उर्वरक सलाह" : 
+                 type === "irrigation" ? "सिंचाई मार्गदर्शन" : "रोग पहचान परिणाम")
+              : config.label
+            }
+          </p>
           {/* Show timestamp if available */}
           {data.savedAt && (
             <p className="rec-card-time">
-              {new Date(data.savedAt).toLocaleString()}
+              {new Date(data.savedAt).toLocaleString(language === "hi" ? "hi-IN" : "en-US")}
             </p>
           )}
         </div>
@@ -59,18 +55,18 @@ function RecommendationCard({ type, data }) {
 
         {type === "crop" && (
           <>
-            <h2 className="rec-main-value">{data.recommendedCrop}</h2>
+            <h2 className="rec-main-value">{translateTerm(data.recommendedCrop, language)}</h2>
             {data.confidence && (
               <span className={`badge ${getConfidenceClass(data.confidence)}`}>
-                {data.confidence}% Confidence
+                {data.confidence}% {language === "hi" ? "विश्वास (Confidence)" : "Confidence"}
               </span>
             )}
             {data.alternatives && data.alternatives.length > 0 && (
               <div className="rec-alternatives">
-                <p className="alt-label">Alternatives:</p>
+                <p className="alt-label">{language === "hi" ? "वैकल्पिक फसलें:" : "Alternatives:"}</p>
                 <div className="alt-tags">
                   {data.alternatives.map((alt, idx) => (
-                    <span key={idx} className="alt-tag">{alt}</span>
+                    <span key={idx} className="alt-tag">{translateTerm(alt, language)}</span>
                   ))}
                 </div>
               </div>
@@ -80,32 +76,41 @@ function RecommendationCard({ type, data }) {
 
         {type === "fertilizer" && (
           <>
-            <h2 className="rec-main-value">{data.fertilizer}</h2>
+            <h2 className="rec-main-value">{translateTerm(data.fertilizer, language)}</h2>
             {data.quantity && (
-              <p className="rec-sub-value">Quantity: {data.quantity}</p>
+              <p className="rec-sub-value">
+                {language === "hi" ? "आवश्यक मात्रा:" : "Quantity:"} {translateTerm(data.quantity, language)}
+              </p>
             )}
           </>
         )}
 
         {type === "irrigation" && (
           <>
-            <h2 className="rec-main-value">{data.waterRequirement}</h2>
-            <p className="rec-sub-value">Frequency: {data.frequency}</p>
+            <h2 className="rec-main-value">{translateTerm(data.waterRequirement, language)}</h2>
+            <p className="rec-sub-value">
+              {language === "hi" ? "सिंचाई आवृत्ति:" : "Frequency:"} {translateTerm(data.frequency, language)}
+            </p>
             {data.method && (
-              <p className="rec-sub-value">Method: {data.method}</p>
+              <p className="rec-sub-value">
+                {language === "hi" ? "सिंचाई विधि:" : "Method:"} {translateTerm(data.method, language)}
+              </p>
             )}
           </>
         )}
 
         {type === "disease" && (
           <>
-            <h2 className="rec-main-value">{data.disease}</h2>
+            <h2 className="rec-main-value">{translateTerm(data.disease, language)}</h2>
             {data.severity && (
               <span className={`badge ${
                 data.severity === "High" ? "badge-red" :
                 data.severity === "Medium" ? "badge-yellow" : "badge-green"
               }`}>
-                {data.severity} Severity
+                {language === "hi" 
+                  ? (data.severity === "High" ? "उच्च" : data.severity === "Medium" ? "मध्यम" : "कम") 
+                  : data.severity
+                } {language === "hi" ? "तीव्रता (Severity)" : "Severity"}
               </span>
             )}
           </>
@@ -115,9 +120,9 @@ function RecommendationCard({ type, data }) {
       {/* ── Advisory Note ──────────────────────────────────── */}
       {(data.advisoryNote || data.guidance || data.tips || data.treatment) && (
         <div className="rec-card-note">
-          <p className="note-title">📋 Advisory Note</p>
+          <p className="note-title">📋 {language === "hi" ? "सुझाव विवरण (Advisory Note)" : "Advisory Note"}</p>
           <p className="note-text">
-            {data.advisoryNote || data.guidance || data.tips || data.treatment}
+            {translateSentence(data.advisoryNote || data.guidance || data.tips || data.treatment, language)}
           </p>
         </div>
       )}
@@ -125,8 +130,8 @@ function RecommendationCard({ type, data }) {
       {/* ── Prevention (Disease only) ──────────────────────── */}
       {type === "disease" && data.prevention && (
         <div className="rec-card-note rec-card-prevention">
-          <p className="note-title">🛡️ Prevention</p>
-          <p className="note-text">{data.prevention}</p>
+          <p className="note-title">🛡️ {language === "hi" ? "बचाव व रोकथाम (Prevention)" : "Prevention"}</p>
+          <p className="note-text">{translateSentence(data.prevention, language)}</p>
         </div>
       )}
 

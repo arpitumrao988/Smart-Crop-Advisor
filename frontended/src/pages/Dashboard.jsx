@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth }     from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";   // ← NEW
+import { translateTerm } from "../translations/translations";
 import { getRecommendationHistory } from "../services/recommendService";
 import AlertBanner from "../components/AlertBanner";
 import Loader from "../components/Loader";
@@ -13,7 +14,7 @@ import "./Dashboard.css";
 
 function Dashboard() {
   const { user }  = useAuth();
-  const { t }     = useLanguage();                          // ← NEW
+  const { t, language } = useLanguage();                          // ← NEW
 
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -148,10 +149,15 @@ function Dashboard() {
                             item.type === "FERTILIZER" ? "blue"  :
                             item.type === "IRRIGATION" ? "blue"  : "yellow"
                           }`}>
-                            {item.type}
+                            {language === "hi" 
+                              ? (item.type === "CROP" ? "फसल" : 
+                                 item.type === "FERTILIZER" ? "उर्वरक" : 
+                                 item.type === "IRRIGATION" ? "सिंचाई" : "रोग")
+                              : item.type
+                            }
                           </span>
                         </td>
-                        <td className="result-cell">{item.result}</td>
+                        <td className="result-cell">{translateTerm(item.result, language)}</td>
                         <td>{item.confidence ? `${item.confidence}%` : t.dashboard.na}</td>
                         <td className="date-cell">
                           {new Date(item.createdAt).toLocaleDateString()}
