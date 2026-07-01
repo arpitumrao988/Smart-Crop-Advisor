@@ -41,4 +41,4 @@ public record DiseaseDetectRequest(
         @NotEmpty(message = "Please describe or select at least one symptom")
         List<String> symptoms
 
-) {}
+) {}
