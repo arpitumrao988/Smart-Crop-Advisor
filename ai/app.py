@@ -124,18 +124,33 @@ def fertilizer_predict(data : fertilizerInput):
 
 # Disease prediction model
 
-disease_crop_encoder = joblib.load(BASE_DIR/"models/disease_crop_encoder.pkl,")
-disease_crop_metadata = joblib.load(BASE_DIR/"models/disease_crop_metadata.pkl")
+disease_crop_encoder = joblib.load(BASE_DIR/"models/disease_crop_encoder.pkl")
+disease_crop_metadata = joblib.load(BASE_DIR/"models/disease_model_metadata.pkl")
 disease_model = joblib.load(BASE_DIR/"models/disease_model.pkl")
 disease_target_encoder = joblib.load(BASE_DIR/"models/disease_target_encoder.pkl")
 disease_tfidf = joblib.load(BASE_DIR/"models/disease_tfidf.pkl")
 
 class disease_data(BaseModel):
-    cropName = str
-    symptomName = list[str] 
+    cropName : str
+    symptoms : list[str] 
 
-symptomText= " ".join(disease_data.symptomName)
 
-crop = disease_crop_encoder.transform([disease_data.cropName])[0]
-symptomVector = disease_tfidf.transform([symptomText])
 
+@app.post("/disease")
+def disease_prediction(data : disease_data):
+    crop = disease_crop_encoder.transform([data.cropName])[0]
+    crop_sparse= csr_matrix([[float(crop)]])
+
+    symptomText= " ".join(data.symptoms)
+    symptomVector = disease_tfidf.transform([symptomText])
+    
+    feature = hstack([crop_sparse,symptomVector])
+
+    prediction= disease_model.predict(feature)
+    disease = disease_target_encoder.inverse_transform(prediction)[0]
+    confidence = float(disease_model.predict_proba(feature).max()*100)
+                       
+    return {
+        "prediction" : disease,
+        "confidence": round(confidence, 2)
+    }
