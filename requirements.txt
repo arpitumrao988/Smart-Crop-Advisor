@@ -1,0 +1,11 @@
+fastapi
+uvicorn 
+requests
+pandas
+numpy
+kaggle
+matplotlib
+scikit-learn
+seaborn 
+joblib
+nbconvert

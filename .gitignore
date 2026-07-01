@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+venv/
+.venv/
+.antigravitycli/
+=======
+.idea/
+>>>>>>> origin/CR
+=======
 .idea/
 frontended/.env
 frontended/node_modules/
+>>>>>>> d11086cb83807ad3d6a3645ab661755b31e39763

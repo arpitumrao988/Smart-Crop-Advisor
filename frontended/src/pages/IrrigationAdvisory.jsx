@@ -18,6 +18,7 @@ import RecommendationCard from "../components/RecommendationCard";
 import AlertBanner        from "../components/AlertBanner";
 import Loader             from "../components/Loader";
 import "./RecommendPages.css";
+
 // In every page file add:
 // import { useLanguage } from "../context/LanguageContext";
 

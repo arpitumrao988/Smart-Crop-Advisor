@@ -18,6 +18,7 @@ import RecommendationCard from "../components/RecommendationCard";
 import AlertBanner        from "../components/AlertBanner";
 import Loader             from "../components/Loader";
 import "./RecommendPages.css";
+
 // In every page file add:
 // import { useLanguage } from "../context/LanguageContext";
 
@@ -28,6 +29,7 @@ import "./RecommendPages.css";
 // "Welcome back,"      → t("dash_welcome")
 // "Total Advisories"   → t("dash_totalAdvisories")
 // etc.
+
 // Options for dropdown fields
 const CROP_OPTIONS = [
   "Rice", "Maize", "Jute", "Cotton", "Coconut", "Papaya", "Orange",
