@@ -1,8 +1,11 @@
 fastapi
-uvicorn
+uvicorn 
 requests
 pandas
 numpy
-scipy
+kaggle
+matplotlib
 scikit-learn
+seaborn 
 joblib
+nbconvert

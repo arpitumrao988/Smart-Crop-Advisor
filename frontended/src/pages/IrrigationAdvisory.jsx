@@ -14,12 +14,21 @@
 
 import React, { useState } from "react";
 import { getIrrigationAdvisory } from "../services/recommendService";
-import { useLanguage } from "../context/LanguageContext";
-import { translateTerm } from "../translations/translations";
 import RecommendationCard from "../components/RecommendationCard";
 import AlertBanner        from "../components/AlertBanner";
 import Loader             from "../components/Loader";
 import "./RecommendPages.css";
+
+// In every page file add:
+// import { useLanguage } from "../context/LanguageContext";
+
+// Inside component add:
+// const { t } = useLanguage();
+
+// Then replace every hardcoded string:
+// "Welcome back,"      → t("dash_welcome")
+// "Total Advisories"   → t("dash_totalAdvisories")
+// etc.
 
 const CROP_OPTIONS = [
   "Rice", "Wheat", "Maize", "Cotton", "Sugarcane", "Tomato",
@@ -31,17 +40,6 @@ const GROWTH_STAGES = [
 ];
 
 function IrrigationAdvisory() {
-  const { language } = useLanguage();
-
-  const GROWTH_STAGES_MAP = {
-    Germination: "अंकुरण (Germination)",
-    Seedling: "अंकुर/पौधा (Seedling)",
-    Vegetative: "वानस्पतिक (Vegetative)",
-    Flowering: "पुष्पन (Flowering)",
-    Fruiting: "फलने (Fruiting)",
-    Maturity: "परिपक्वता (Maturity)"
-  };
-
   // ── Form State ───────────────────────────────────────────
   const [formData, setFormData] = useState({
     cropName:    "",
@@ -65,7 +63,7 @@ function IrrigationAdvisory() {
 
     if (!formData.cropName || !formData.soilMoisture ||
         !formData.temperature || !formData.growthStage) {
-      setError(language === "hi" ? "कृपया सभी फ़ील्ड भरें।" : "Please fill in all fields.");
+      setError("Please fill in all fields.");
       return;
     }
 
@@ -74,9 +72,9 @@ function IrrigationAdvisory() {
 
     const payload = {
       cropName:     formData.cropName,
+      growthStage:  formData.growthStage,
       soilMoisture: parseFloat(formData.soilMoisture),
       temperature:  parseFloat(formData.temperature),
-      growthStage:  formData.growthStage,
     };
 
     // ─────────────────────────────────────────────────────────
@@ -116,14 +114,10 @@ function IrrigationAdvisory() {
       <div className="container recommend-container">
 
         <div className="recommend-header">
-          <h1 className="recommend-title">
-            {language === "hi" ? "💧 सिंचाई मार्गदर्शन" : "💧 Irrigation Advisory"}
-          </h1>
+          <h1 className="recommend-title">💧 Irrigation Advisory</h1>
           <p className="recommend-subtitle">
-            {language === "hi"
-              ? "हमें अपनी फसल का प्रकार, मिट्टी की नमी, तापमान और विकास चरण बताएं। हम पानी की इष्टतम आवश्यकता और सिंचाई आवृत्ति की गणना करेंगे।"
-              : "Tell us your crop type, soil moisture, temperature, and growth stage. We'll calculate the optimal water requirement and irrigation frequency."
-            }
+            Tell us your crop type, soil moisture, temperature, and growth stage.
+            We'll calculate the optimal water requirement and irrigation frequency.
           </p>
         </div>
 
@@ -132,9 +126,7 @@ function IrrigationAdvisory() {
           {/* ── Form ───────────────────────────────────────── */}
           <div className="recommend-form-section">
             <div className="card">
-              <h2 className="form-section-title">
-                {language === "hi" ? "📋 खेत की परिस्थितियाँ" : "📋 Field Conditions"}
-              </h2>
+              <h2 className="form-section-title">📋 Field Conditions</h2>
 
               {error && (
                 <AlertBanner type="error" message={error} onClose={() => setError("")} />
@@ -144,35 +136,25 @@ function IrrigationAdvisory() {
 
                 {/* Crop Dropdown */}
                 <div className="form-group">
-                  <label className="form-label" htmlFor="cropName">
-                    {language === "hi" ? "फसल का नाम" : "Crop Name"}
-                  </label>
+                  <label className="form-label" htmlFor="cropName">Crop Name</label>
                   <select
                     id="cropName" name="cropName" className="form-input"
                     value={formData.cropName} onChange={handleChange} disabled={loading}
                   >
-                    <option value="">{language === "hi" ? "-- फसल का चयन करें --" : "-- Select crop --"}</option>
-                    {CROP_OPTIONS.map(c => (
-                      <option key={c} value={c}>{translateTerm(c, language)}</option>
-                    ))}
+                    <option value="">-- Select crop --</option>
+                    {CROP_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
 
                 {/* Growth Stage Dropdown */}
                 <div className="form-group">
-                  <label className="form-label" htmlFor="growthStage">
-                    {language === "hi" ? "विकास चरण" : "Growth Stage"}
-                  </label>
+                  <label className="form-label" htmlFor="growthStage">Growth Stage</label>
                   <select
                     id="growthStage" name="growthStage" className="form-input"
                     value={formData.growthStage} onChange={handleChange} disabled={loading}
                   >
-                    <option value="">{language === "hi" ? "-- विकास चरण चुनें --" : "-- Select growth stage --"}</option>
-                    {GROWTH_STAGES.map(g => (
-                      <option key={g} value={g}>
-                        {language === "hi" ? (GROWTH_STAGES_MAP[g] || g) : g}
-                      </option>
-                    ))}
+                    <option value="">-- Select growth stage --</option>
+                    {GROWTH_STAGES.map(g => <option key={g} value={g}>{g}</option>)}
                   </select>
                 </div>
 
@@ -180,48 +162,38 @@ function IrrigationAdvisory() {
                   {/* Soil Moisture */}
                   <div className="form-group">
                     <label className="form-label" htmlFor="soilMoisture">
-                      {language === "hi" ? "मिट्टी की नमी" : "Soil Moisture"} <span className="field-unit">%</span>
+                      Soil Moisture <span className="field-unit">%</span>
                     </label>
                     <input
                       id="soilMoisture" name="soilMoisture" type="number" step="any"
-                      className="form-input" 
-                      placeholder={language === "hi" ? "सीमा: 0 - 100" : "Range: 0 - 100"}
+                      className="form-input" placeholder="e.g. 35"
                       value={formData.soilMoisture} onChange={handleChange}
                       min={0} max={100} disabled={loading}
                     />
-                    <p className="field-tip">
-                      {language === "hi" ? "आपकी मिट्टी का वर्तमान नमी स्तर (0-100%)" : "Current moisture level of your soil (0–100%)"}
-                    </p>
+                    <p className="field-tip">Current moisture level of your soil (0–100%)</p>
                   </div>
 
                   {/* Temperature */}
                   <div className="form-group">
                     <label className="form-label" htmlFor="temperature">
-                      {language === "hi" ? "तापमान" : "Temperature"} <span className="field-unit">°C</span>
+                      Temperature <span className="field-unit">°C</span>
                     </label>
                     <input
                       id="temperature" name="temperature" type="number" step="any"
-                      className="form-input" 
-                      placeholder={language === "hi" ? "सीमा: 5 - 50" : "Range: 5 - 50"}
+                      className="form-input" placeholder="e.g. 30"
                       value={formData.temperature} onChange={handleChange}
                       min={5} max={50} disabled={loading}
                     />
-                    <p className="field-tip">
-                      {language === "hi" ? "आपके खेत में दिन का वर्तमान तापमान" : "Current daytime temperature in your field"}
-                    </p>
+                    <p className="field-tip">Current daytime temperature in your field</p>
                   </div>
                 </div>
 
                 <div className="form-actions">
                   <button type="submit" className="btn-primary" disabled={loading}>
-                    {loading ? (
-                      <><span className="btn-spinner" /> {language === "hi" ? "गणना की जा रही है..." : "Calculating..."}</>
-                    ) : (
-                      language === "hi" ? "💧 सिंचाई योजना प्राप्त करें" : "💧 Get Irrigation Plan"
-                    )}
+                    {loading ? <><span className="btn-spinner" /> Calculating...</> : "💧 Get Irrigation Plan"}
                   </button>
                   <button type="button" className="btn-secondary" onClick={handleReset} disabled={loading}>
-                    {language === "hi" ? "🔄 रीसेट" : "🔄 Reset"}
+                    🔄 Reset
                   </button>
                 </div>
               </form>
@@ -230,11 +202,15 @@ function IrrigationAdvisory() {
 
           {/* ── Result ─────────────────────────────────────── */}
           <div className="recommend-result-section">
-            {loading && <Loader message={language === "hi" ? "सिंचाई मार्गदर्शन की गणना की जा रही है..." : "Calculating irrigation advisory..."} />}
+            {loading && <Loader message="Calculating your irrigation plan..." />}
 
+            {/* 
+                🔗 Result from POST /api/v1/recommend/irrigation
+                Displayed by RecommendationCard component
+            */}
             {!loading && result && (
               <>
-                <AlertBanner type="success" message={language === "hi" ? "सिंचाई मार्गदर्शन सफलतापूर्वक उत्पन्न किया गया!" : "Irrigation advisory generated!"} />
+                <AlertBanner type="success" message="Irrigation plan generated and saved!" />
                 <RecommendationCard type="irrigation" data={result} />
               </>
             )}
