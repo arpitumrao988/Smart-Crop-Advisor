@@ -1,0 +1,27 @@
+.footer {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-green));
+    color: rgba(255,255,255,0.85);
+    padding: 32px 20px;
+    margin-top: auto;
+  }
+  
+  .footer-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .footer-tagline { font-size: 14px; opacity: 0.8; }
+  .footer-team    { font-size: 13px; opacity: 0.75; }
+  .footer-copy    { font-size: 12px; opacity: 0.6; margin-top: 4px; }

@@ -1,0 +1,54 @@
+# ── IDEs, Editors & OS ────────────────────────────────
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Java / Maven (Backend) ───────────────────────────
+backend/target/
+backend/*.class
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/bin/
+backend/.factorypath
+
+# ── Node.js / React (Frontend) ───────────────────────
+frontended/node_modules/
+frontended/dist/
+frontended/build/
+frontended/.env.local
+frontended/.env.development.local
+frontended/.env.test.local
+frontended/.env.production.local
+frontended/npm-debug.log*
+frontended/yarn-debug.log*
+frontended/yarn-error.log*
+
+# ── Python / AI Module ───────────────────────────────
+ai/venv/
+ai/.venv/
+ai/env/
+ai/__pycache__/
+ai/*.pyc
+ai/*.pyo
+ai/*.pyd
+ai/.pytest_cache/
+ai/.ipynb_checkpoints/
+
+# ── Temporary & Log Files ────────────────────────────
+*.log
+logs/
+tmp/
+temp/
+frontended/.env
