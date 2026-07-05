@@ -14,13 +14,12 @@
 
 import React, { useState } from "react";
 import { getFertilizerRecommendation } from "../services/recommendService";
+import { useLanguage } from "../context/LanguageContext";
+import { translateTerm } from "../translations/translations";
 import RecommendationCard from "../components/RecommendationCard";
 import AlertBanner        from "../components/AlertBanner";
 import Loader             from "../components/Loader";
 import "./RecommendPages.css";
-
-// In every page file add:
-// import { useLanguage } from "../context/LanguageContext";
 
 // Inside component add:
 // const { t } = useLanguage();
@@ -29,7 +28,6 @@ import "./RecommendPages.css";
 // "Welcome back,"      → t("dash_welcome")
 // "Total Advisories"   → t("dash_totalAdvisories")
 // etc.
-
 // Options for dropdown fields
 const CROP_OPTIONS = [
   "Rice", "Maize", "Jute", "Cotton", "Coconut", "Papaya", "Orange",
@@ -42,6 +40,8 @@ const SOIL_TYPES = [
 ];
 
 function FertilizerRecommend() {
+  const { language } = useLanguage();
+
   // ── Form State ───────────────────────────────────────────
   const [formData, setFormData] = useState({
     cropName:   "",
@@ -66,7 +66,7 @@ function FertilizerRecommend() {
 
     if (!formData.cropName || !formData.soilType ||
         !formData.nitrogen  || !formData.phosphorus || !formData.potassium) {
-      setError("Please fill in all fields.");
+      setError(language === "hi" ? "कृपया सभी फ़ील्ड भरें।" : "Please fill in all fields.");
       return;
     }
 
@@ -82,25 +82,6 @@ function FertilizerRecommend() {
       potassium:  parseFloat(formData.potassium),
     };
 
-    // ─────────────────────────────────────────────────────────
-    // 🔗 API CALL — POST /api/v1/recommend/fertilizer
-    //    Sent to: http://localhost:8080/api/v1/recommend/fertilizer
-    //    Auth:    Bearer token
-    //    Body:    { cropName, soilType, nitrogen, phosphorus, potassium }
-    //
-    //    Backend Flow:
-    //      1. Validates JWT
-    //      2. Calls Python AI: POST localhost:5000/predict/fertilizer
-    //      3. Saves result to MySQL
-    //      4. Returns recommendation
-    //
-    //    Returns: {
-    //      fertilizer: "Urea",
-    //      quantity: "50 kg per acre",
-    //      guidance: "Apply in two split doses...",
-    //      savedAt: "..."
-    //    }
-    // ─────────────────────────────────────────────────────────
     const res = await getFertilizerRecommendation(payload);
 
     setLoading(false);
@@ -123,10 +104,14 @@ function FertilizerRecommend() {
       <div className="container recommend-container">
 
         <div className="recommend-header">
-          <h1 className="recommend-title">💊 Fertilizer Recommendation</h1>
+          <h1 className="recommend-title">
+            {language === "hi" ? "💊 उर्वरक सलाह" : "💊 Fertilizer Recommendation"}
+          </h1>
           <p className="recommend-subtitle">
-            Select your crop and soil type, enter current NPK levels to get
-            a personalized fertilizer recommendation.
+            {language === "hi"
+              ? "अपनी फसल और मिट्टी का प्रकार चुनें, और व्यक्तिगत उर्वरक सलाह प्राप्त करने के लिए वर्तमान NPK स्तर दर्ज करें।"
+              : "Select your crop and soil type, enter current NPK levels to get a personalized fertilizer recommendation."
+            }
           </p>
         </div>
 
@@ -135,7 +120,9 @@ function FertilizerRecommend() {
           {/* ── Form ───────────────────────────────────────── */}
           <div className="recommend-form-section">
             <div className="card">
-              <h2 className="form-section-title">📋 Enter Details</h2>
+              <h2 className="form-section-title">
+                {language === "hi" ? "📋 विवरण दर्ज करें" : "📋 Enter Details"}
+              </h2>
 
               {error && (
                 <AlertBanner type="error" message={error} onClose={() => setError("")} />
@@ -145,7 +132,9 @@ function FertilizerRecommend() {
 
                 {/* Crop Dropdown */}
                 <div className="form-group">
-                  <label className="form-label" htmlFor="cropName">Crop Name</label>
+                  <label className="form-label" htmlFor="cropName">
+                    {language === "hi" ? "फसल का नाम" : "Crop Name"}
+                  </label>
                   <select
                     id="cropName"
                     name="cropName"
@@ -154,16 +143,18 @@ function FertilizerRecommend() {
                     onChange={handleChange}
                     disabled={loading}
                   >
-                    <option value="">-- Select your crop --</option>
+                    <option value="">{language === "hi" ? "-- फसल का चयन करें --" : "-- Select your crop --"}</option>
                     {CROP_OPTIONS.map(c => (
-                      <option key={c} value={c}>{c}</option>
+                      <option key={c} value={c}>{translateTerm(c, language)}</option>
                     ))}
                   </select>
                 </div>
 
                 {/* Soil Type Dropdown */}
                 <div className="form-group">
-                  <label className="form-label" htmlFor="soilType">Soil Type</label>
+                  <label className="form-label" htmlFor="soilType">
+                    {language === "hi" ? "मिट्टी का प्रकार" : "Soil Type"}
+                  </label>
                   <select
                     id="soilType"
                     name="soilType"
@@ -172,9 +163,9 @@ function FertilizerRecommend() {
                     onChange={handleChange}
                     disabled={loading}
                   >
-                    <option value="">-- Select soil type --</option>
+                    <option value="">{language === "hi" ? "-- मिट्टी का चयन करें --" : "-- Select soil type --"}</option>
                     {SOIL_TYPES.map(s => (
-                      <option key={s} value={s}>{s}</option>
+                      <option key={s} value={s}>{translateTerm(s, language)}</option>
                     ))}
                   </select>
                 </div>
@@ -183,42 +174,58 @@ function FertilizerRecommend() {
                 <div className="fields-grid">
                   <div className="form-group">
                     <label className="form-label" htmlFor="nitrogen">
-                      Nitrogen (N) <span className="field-unit">mg/kg</span>
+                      {language === "hi" ? "नाइट्रोजन (N)" : "Nitrogen (N)"} <span className="field-unit">mg/kg</span>
                     </label>
                     <input
                       id="nitrogen" name="nitrogen" type="number" step="any"
-                      className="form-input" placeholder="e.g. 90"
+                      className="form-input" 
+                      placeholder={language === "hi" ? "सीमा: 0 - 140" : "Range: 0 - 140"}
                       value={formData.nitrogen} onChange={handleChange} disabled={loading}
                     />
+                    <p className="field-tip">
+                      {language === "hi" ? "मिट्टी में उपलब्ध नाइट्रोजन। आदर्श: 0-140 mg/kg" : "Available nitrogen in soil. Ideal: 0–140 mg/kg"}
+                    </p>
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="phosphorus">
-                      Phosphorus (P) <span className="field-unit">mg/kg</span>
+                      {language === "hi" ? "फास्फोरस (P)" : "Phosphorus (P)"} <span className="field-unit">mg/kg</span>
                     </label>
                     <input
                       id="phosphorus" name="phosphorus" type="number" step="any"
-                      className="form-input" placeholder="e.g. 42"
+                      className="form-input" 
+                      placeholder={language === "hi" ? "सीमा: 5 - 145" : "Range: 5 - 145"}
                       value={formData.phosphorus} onChange={handleChange} disabled={loading}
                     />
+                    <p className="field-tip">
+                      {language === "hi" ? "मिट्टी में उपलब्ध फास्फोरस। आदर्श: 5-145 mg/kg" : "Available phosphorus in soil. Ideal: 5–145 mg/kg"}
+                    </p>
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="potassium">
-                      Potassium (K) <span className="field-unit">mg/kg</span>
+                      {language === "hi" ? "पोटेशियम (K)" : "Potassium (K)"} <span className="field-unit">mg/kg</span>
                     </label>
                     <input
                       id="potassium" name="potassium" type="number" step="any"
-                      className="form-input" placeholder="e.g. 43"
+                      className="form-input" 
+                      placeholder={language === "hi" ? "सीमा: 5 - 205" : "Range: 5 - 205"}
                       value={formData.potassium} onChange={handleChange} disabled={loading}
                     />
+                    <p className="field-tip">
+                      {language === "hi" ? "मिट्टी में उपलब्ध पोटेशियम। आदर्श: 5-205 mg/kg" : "Available potassium in soil. Ideal: 5–205 mg/kg"}
+                    </p>
                   </div>
                 </div>
 
                 <div className="form-actions">
                   <button type="submit" className="btn-primary" disabled={loading}>
-                    {loading ? <><span className="btn-spinner" /> Analyzing...</> : "💊 Get Fertilizer Advice"}
+                    {loading ? (
+                      <><span className="btn-spinner" /> {language === "hi" ? "विश्लेषण हो रहा है..." : "Analyzing..."}</>
+                    ) : (
+                      language === "hi" ? "💊 उर्वरक सलाह प्राप्त करें" : "💊 Get Fertilizer Advice"
+                    )}
                   </button>
                   <button type="button" className="btn-secondary" onClick={handleReset} disabled={loading}>
-                    🔄 Reset
+                    {language === "hi" ? "🔄 रीसेट" : "🔄 Reset"}
                   </button>
                 </div>
               </form>
@@ -227,15 +234,11 @@ function FertilizerRecommend() {
 
           {/* ── Result ─────────────────────────────────────── */}
           <div className="recommend-result-section">
-            {loading && <Loader message="Calculating fertilizer recommendation..." />}
+            {loading && <Loader message={language === "hi" ? "उर्वरक सिफारिश की गणना की जा रही है..." : "Calculating fertilizer recommendation..."} />}
 
-            {/* 
-                🔗 Result from POST /api/v1/recommend/fertilizer
-                Passed to RecommendationCard which renders it as a card
-            */}
             {!loading && result && (
               <>
-                <AlertBanner type="success" message="Fertilizer recommendation saved!" />
+                <AlertBanner type="success" message={language === "hi" ? "उर्वरक सलाह सफलतापूर्वक सहेजी गई!" : "Fertilizer recommendation saved!"} />
                 <RecommendationCard type="fertilizer" data={result} />
               </>
             )}
@@ -243,8 +246,8 @@ function FertilizerRecommend() {
             {!loading && !result && (
               <div className="result-placeholder">
                 <span className="placeholder-icon">💊</span>
-                <h3>Your fertilizer advice will appear here</h3>
-                <p>Select crop, soil type, and enter NPK values to proceed</p>
+                <h3>{language === "hi" ? "आपकी उर्वरक सलाह यहाँ दिखाई देगी" : "Your fertilizer advice will appear here"}</h3>
+                <p>{language === "hi" ? "फसल, मिट्टी का प्रकार चुनें और जारी रखने के लिए NPK मान दर्ज करें" : "Select crop, soil type, and enter NPK values to proceed"}</p>
               </div>
             )}
           </div>

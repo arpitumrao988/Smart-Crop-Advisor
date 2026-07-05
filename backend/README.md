@@ -59,9 +59,9 @@ All endpoints, except `/auth/**` and `/health`, require a valid `Authorization: 
 | `/api/v1/users/{id}` | `PUT` | Token | Update user profile details (name/location) |
 | `/api/v1/users/{id}` | `DELETE` | Token | Permanently delete account and cascading records |
 
-## 🤖 AI Module Integration Guide
+## 🤖 AI Module Integration Guide 
 
-If you are developing the Python AI/ML module, your server must run on **port 5000** (or whatever port is configured in `application.properties`).
+If you are developing the Python AI/ML module, your server must run on **port 5000** (or whatever port is configured in `application.properties`). 
 
 You must expose the following three endpoints with these exact JSON input and output payloads:
 

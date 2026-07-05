@@ -95,10 +95,10 @@ public class SecurityConfig {
         http
                 // Configure CORS using our custom source
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
+                
                 // Disable CSRF since we use stateless JWT authentication (not session cookies)
                 .csrf(csrf -> csrf.disable())
-
+                
                 // Authorize endpoints
                 .authorizeHttpRequests(auth -> auth
                         // Permit public auth requests, health check, and error fallback paths
@@ -106,15 +106,15 @@ public class SecurityConfig {
                         // Require authentication for any other API endpoints
                         .anyRequest().authenticated()
                 )
-
+                
                 // Session policy is stateless (no HttpSession will be created/used)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
+                
                 // Set our authentication provider
                 .authenticationProvider(authenticationProvider())
-
+                
                 // Inject JWT authorization filter before UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

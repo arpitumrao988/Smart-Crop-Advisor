@@ -196,7 +196,7 @@ The system is built as a **3-tier architecture** with 4 components:
 | **Scikit-Learn** | 1.4.x | The primary ML library — used for model training, evaluation, and inference |
 | **Pandas** | 2.2.x | Loads and processes CSV datasets, handles missing values, feature engineering |
 | **NumPy** | 1.26.x | Numerical operations, array handling, math functions for ML pipelines |
-| **Flask / FastAPI** | 3.0 / 0.110 | Wraps the ML models as HTTP endpoints that the backend can call |
+| **FastAPI** | 3.0 / 0.110 | Wraps the ML models as HTTP endpoints that the backend can call |
 | **Joblib** | 1.3.x | Saves trained models as `.pkl` files and loads them back for inference |
 
 ### 🗄️ Database
@@ -211,7 +211,7 @@ The system is built as a **3-tier architecture** with 4 components:
 ```
 smart-crop-advisor/                        ← Root of the project
 │
-├── frontend/                              ← Everything the user SEES (React.js App)
+├── frontended/                              ← Everything the user SEES (React.js App)
 │   ├── public/
 │   │   └── index.html                     ← Single HTML page that React renders into
 │   ├── src/
@@ -319,7 +319,7 @@ smart-crop-advisor/                        ← Root of the project
 
 > **Owned by: Anubhav Tripathi (Frontend Developer)**
 > **Technology: React.js, HTML, CSS, JavaScript, Axios**
-> **Runs at: http://localhost:3000**
+> **Runs at: http://localhost:5173**
 
 The frontend is a **Single Page Application (SPA)** built with React.js. This means the entire application loads once in the browser and then React dynamically shows and hides components as the user navigates — without reloading the page. The user interacts only with this layer. They never directly call the backend or AI module — the frontend does that for them.
 
@@ -630,7 +630,7 @@ The same training pipeline is followed for the fertilizer and disease models, wi
 
 ### 🔮 Prediction Logic (`predict.py`)
 
-When the Flask server receives a request, `predict.py` is called:
+When the FastAPI server receives a request, `predict.py` is called:
 
 ```python
 import joblib, numpy as np
@@ -653,7 +653,7 @@ def predict_crop(N, P, K, temperature, humidity, ph, rainfall):
 
 ### 🌐 API Server (`app.py`)
 
-The Flask server exposes three prediction endpoints that the Java backend calls:
+The FastAPI server exposes three prediction endpoints that the Java backend calls:
 
 ```python
 from flask import Flask, request, jsonify
@@ -813,7 +813,7 @@ if __name__ == '__main__':
         • Evaluate models with accuracy score, confusion matrix, classification report<br/>
         • Save all trained models and encoders as .pkl files using Joblib<br/>
         • Write predict.py with inference functions for all three models<br/>
-        • Set up Flask server (app.py) with three prediction endpoints<br/>
+        • Set up FastAPI server (app.py) with three prediction endpoints<br/>
         • Document all model training steps in Jupyter notebooks<br/>
         • Write requirements.txt with all dependencies pinned to exact versions<br/>
         • Test all prediction endpoints using Postman / curl
@@ -897,13 +897,13 @@ mvn spring-boot:run
 
 ```bash
 # Step 1 — Open a new terminal and navigate to frontend
-cd ../frontend
+cd ../frontended
 
 # Step 2 — Install all Node.js dependencies
 npm install
 
 # Step 3 — Create the environment file
-# Create a file named .env in the frontend/ directory with this content:
+# Create a file named .env in the frontended/ directory with this content:
 ```
 
 ```env
@@ -912,10 +912,10 @@ REACT_APP_API_BASE_URL=http://localhost:8080/api/v1
 
 ```bash
 # Step 4 — Start the development server
-npm start
+npm run dev
 ```
 
-> ✅ **Frontend running at:** `http://localhost:3000`
+> ✅ **Frontend running at:** `http://localhost:5173`
 > Your browser will open automatically.
 
 ---
@@ -942,12 +942,12 @@ pip install -r requirements.txt
 # This reads the CSVs in data/, trains the models, and saves .pkl files to models/
 python train.py
 
-# Step 6 — Start the Flask server
-python app.py
+# Step 6 — Start the FastAPI server
+python -m uvicorn app:app --host 127.0.0.1 --port 5000
 ```
 
 > ✅ **AI Module running at:** `http://localhost:5000`
-> You should see: `Running on http://127.0.0.1:5000`
+> You should see: `Uvicorn running on http://127.0.0.1:5000`
 
 **`requirements.txt` contents:**
 ```
@@ -989,7 +989,7 @@ Open three terminals and confirm:
 | Service | URL | Expected Response |
 |---|---|---|
 | Backend | `http://localhost:8080/api/v1/health` | `{"status": "UP"}` |
-| Frontend | `http://localhost:3000` | React app loads in browser |
+| Frontend | `http://localhost:5173` | React app loads in browser |
 | AI Module | `http://localhost:5000/` | `{"message": "Smart Crop Advisor AI Module is running"}` |
 
 ---
@@ -1092,7 +1092,7 @@ Here is a complete walkthrough of what happens when a farmer submits the Crop Re
               POST http://localhost:5000/predict/crop
               Body: { N:90, P:42, K:43, temperature:25.5, humidity:80, ph:6.5, rainfall:202.9 }
         ↓
-7. 🤖 Python Flask server receives the call at /predict/crop
+7. 🤖 Python FastAPI server receives the call at /predict/crop
         → predict.py loads crop_model.pkl and scaler.pkl
         → Scales the input data using StandardScaler
         → Runs model.predict() → gets "Rice" (encoded)

@@ -59,15 +59,18 @@ public class DiseaseService {
                 "symptoms", request.symptoms()
         );
 
-        String predictedDisease = "Healthy (No Disease Detected)";
+        String predictedDisease;
 
         try {
             Map<?, ?> aiResponse = restTemplate.postForObject(url, aiRequest, Map.class);
             if (aiResponse != null && aiResponse.containsKey("prediction")) {
                 predictedDisease = (String) aiResponse.get("prediction");
+            } else {
+                throw new RuntimeException("Empty response from AI server.");
             }
         } catch (Exception e) {
-            log.error("Failed to connect to Python AI module at {}. Using default fallback prediction.", url, e);
+            log.error("Failed to connect to Python AI module at {}.", url, e);
+            throw new RuntimeException("AI disease detection service is currently offline. Please ensure the AI server is running.");
         }
 
         // 2. Query DiseaseInfo reference table in MySQL

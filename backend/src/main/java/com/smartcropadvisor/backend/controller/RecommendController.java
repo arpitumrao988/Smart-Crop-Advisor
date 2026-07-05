@@ -67,7 +67,7 @@ public class RecommendController {
             @PathVariable Long userId
     ) {
         log.info("Received history lookup request for userId: {}", userId);
-
+        
         // Security check: Make sure user is looking up their own history
         if (!user.getId().equals(userId)) {
             log.warn("Access denied: User {} tried to access history of userId {}", user.getEmail(), userId);

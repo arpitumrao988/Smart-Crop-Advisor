@@ -1,0 +1,20 @@
+Anthracnose
+Bacterial Blight
+Black Scurf
+Black Sigatoka
+Blast
+Brown Spot
+Common Rust
+Downy Mildew
+Early Blight
+Late Blight
+Leaf Blight
+Leaf Curl
+Leaf Rust
+Leaf Spot
+Panama Disease
+Powdery Mildew
+Red Rot
+Root Rot
+Rust
+Wilt

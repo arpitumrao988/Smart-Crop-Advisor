@@ -14,13 +14,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/v1/disease")
-@RequiredArgsConstructor
-@Slf4j
 public class DiseaseController {
 
+    private static final Logger log = LoggerFactory.getLogger(DiseaseController.class);
     private final DiseaseService diseaseService;
+
+    public DiseaseController(DiseaseService diseaseService) {
+        this.diseaseService = diseaseService;
+    }
 
     // ── POST /api/v1/disease/detect ──────────────────────────
     @PostMapping("/detect")
