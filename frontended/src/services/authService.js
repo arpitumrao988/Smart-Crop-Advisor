@@ -15,7 +15,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // ── register() ───────────────────────────────────────────────
 // Called by: Register.jsx on form submit
 //
-// 🔗 API CALL: POST http://localhost:8080/api/v1/auth/register
+//  API CALL: POST http://localhost:8080/api/v1/auth/register
 //   ↓ Backend validates input
 //   ↓ Backend saves new user to MySQL (users table)
 //   ↓ Returns success message
