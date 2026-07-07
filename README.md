@@ -37,6 +37,7 @@
 - [Project Description](#-project-description)
 - [Problem We Are Solving](#-problem-we-are-solving)
 - [Features](#-features)
+- [Application Screenshots](#-application-screenshots)
 - [System Architecture](#️-system-architecture)
 - [Technology Stack](#-technology-stack)
 - [Repository Structure](#-repository-structure)
@@ -99,6 +100,26 @@ Agriculture is the backbone of millions of families, yet most farmers — especi
 | 7 | 🧾 **User Profile Management** | Farmers can update their name, location, and field details from their profile page |
 | 8 | 📱 **Responsive Interface** | The application works cleanly on desktop, tablet, and mobile browsers |
 | 9 | 🌐 **REST API Architecture** | All communication between frontend and backend follows REST standards — clean, scalable, and testable |
+
+---
+
+---
+
+## 📸 Application Screenshots
+
+Here is a visual preview of the Smart Crop Advisor user interface:
+
+| 🏠 Landing Page / Welcome | 🏠 Landing Page / Welcome(Hindi) |
+| :---: | :---: |
+| ![Landing Page](docs/landing_page.png) | ![Dashboard](docs/dashboard.png) |
+
+| 👤 User Dashboard | 🌾 Crop Recommendation |
+| :---: | :---: |
+| ![Crop Recommendation](docs/crop_recommend.png) | ![Fertilizer Recommendation](docs/fertilizer_recommend.png) |
+
+| 💊 Fertilizer Recommendation |
+| :---: |
+| ![Disease Detection](docs/disease_detect.png) |
 
 ---
 
